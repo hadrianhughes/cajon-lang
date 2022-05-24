@@ -1,4 +1,4 @@
-# click-lang
+# Cajon
 
 A language for writing rhythms.
 
@@ -6,7 +6,7 @@ A language for writing rhythms.
 
 ### Basic Operators
 
-* The aim of the language is to be expressed in the way you would count a beat out loud.
+* The aim of Cajon is to be expressable in the way you would count a beat out loud.
 * A bar consists of beats, represented using a dot `.`.
 * Between any two beats there can be 4 possible subdivisions. These are represented by the subdivision operators `e`, `+` and `a`. (3 extra operators; 4 notes in total including the beat `.`)
 * The subdivision operators must appear in the order above. Any other order will cause a compiler error.
@@ -36,7 +36,7 @@ A language for writing rhythms.
 
 ### Expressions
 
-* An expression is a unit of code which independently makes grammatical sense.
+* An expression is a unit of Cajon which independently makes grammatical sense.
 * The beat `.` and rest `,` operators are expressions.
 * The subdivision operators are not expressions, because their validity depends on their position relative to a beat/rest and the other subdivision operators.
 * A bar or collection of bars is an expression.
