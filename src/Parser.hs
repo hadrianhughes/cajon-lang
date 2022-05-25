@@ -20,8 +20,8 @@ exprP = parens exprP
     <|> Operation SubAnd <$ plus
     <|> Operation SubA <$ achar
     <|> Neg <$> (dash *> int)
-    <|> try (Bar <$> int <* colon *> angles exprP)
-    <|> Bar 4 <$> angles exprP
+    <|> try (Bar <$> int <* colon *> slashes exprP)
+    <|> Bar 4 <$> slashes exprP
     <|> try (Repitition <$> int <*> exprP)
     <|> Literal <$> int
 
