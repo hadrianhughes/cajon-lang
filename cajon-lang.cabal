@@ -42,10 +42,13 @@ executable cajon-lang
 library
     exposed-modules:
         Ast
+        Lexer
     other-modules:
         Paths_cajon_lang
     hs-source-dirs:
         src
     build-depends:
         base ^>=4.14.3.0
+        , megaparsec
+        , text
     default-language: Haskell2010
