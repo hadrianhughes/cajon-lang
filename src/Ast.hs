@@ -5,16 +5,17 @@ data Op = Beat
         | SubE
         | SubAnd
         | SubA
-        | TempoChange
         deriving (Show, Eq)
 
-data Bar = Bar Int Expr
-        deriving (Show, Eq)
+data TempoChange = TempoUp Int
+                 | TempoDown Int
+                 deriving (Show, Eq)
 
-data Expr = Operations [Op]
-          | Bars [Bar]
+data Expr = Operation Op
+          | Bar Int Expr
           | Repitition Int Expr
-          | Noexpr
+          | Literal Int
+          | Neg Int
           deriving (Show, Eq)
 
 data Program = Program Expr
