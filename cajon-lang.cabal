@@ -36,4 +36,16 @@ executable cajon-lang
     ghc-options: -Wall -fno-warn-name-shadowing -Wcompat -Wincomplete-uni-patterns
     build-depends:
         base ^>=4.14.3.0
+        , cajon-lang
+    default-language: Haskell2010
+
+library
+    exposed-modules:
+        Ast
+    other-modules:
+        Paths_cajon_lang
+    hs-source-dirs:
+        src
+    build-depends:
+        base ^>=4.14.3.0
     default-language: Haskell2010
