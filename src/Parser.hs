@@ -1,6 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Parser where
+module Parser
+  ( programP
+  , runParser
+  )
+  where
 
 import Ast
 import Lexer

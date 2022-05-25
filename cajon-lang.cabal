@@ -37,6 +37,7 @@ executable cajon-lang
     build-depends:
         base ^>=4.14.3.0
         , cajon-lang
+        , text
     default-language: Haskell2010
 
 library
