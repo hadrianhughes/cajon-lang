@@ -11,7 +11,8 @@ data TempoChange = TempoUp Int
                  | TempoDown Int
                  deriving (Show, Eq)
 
-data Expr = Operation Op
+data Expr = Exprs [Expr]
+          | Operation Op
           | Bar Int Expr
           | Repitition Int Expr
           | Literal Int

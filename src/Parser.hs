@@ -26,4 +26,6 @@ exprP = parens exprP
     <|> Literal <$> int
 
 programP :: Parser Program
-programP = between sc eof (Program <$> exprP)
+programP = between sc eof (Program <$> rootExpr)
+  where
+    rootExpr = Exprs <$> many exprP
