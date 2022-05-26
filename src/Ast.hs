@@ -23,3 +23,23 @@ data Expr = Exprs [Expr]
 
 data Program = Program Expr
           deriving (Show, Eq)
+
+
+-- Semantically valid types
+
+data SLiteral = SLitInt Int
+              | SLitNegInt Int
+              deriving (Show, Eq)
+
+data SBar = SBar SLiteral SExpr
+          deriving (Show, Eq)
+
+data SExpr = SExprs [SExpr]
+           | SOperation Op
+           | SBars [SBar]
+           | SRepitition SLiteral SExpr
+           | STempoChange SLiteral
+           deriving (Show, Eq)
+
+data SProgram = SProgram SExpr
+              deriving (Show, Eq)
