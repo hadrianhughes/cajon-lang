@@ -5,7 +5,7 @@ import Error
 import Control.Monad.Except
 import Control.Monad.State
 
-type Semant = ExceptT SemantError (State SExpr)
+type Semant = Either SemantError
 
 validOpPosition :: [Expr] -> Expr -> Bool
 validOpPosition es (Operation op)
@@ -16,7 +16,7 @@ validOpPosition es (Operation op)
   where
     (Operation prev) = last es
 
-checkExprs :: [Expr] -> Either SemantError SExpr
+checkExprs :: [Expr] -> Semant SExpr
 checkExprs es = do
   case foldM checkExprs' [] es of
     Left err  -> Left err
@@ -28,8 +28,8 @@ checkExprs es = do
          then Right $ es ++ [Operation op]
          else Left $ MisplacedSubdivision (opToSubDiv e)
 
-checkExpr :: Expr -> Either SemantError SExpr
+checkExpr :: Expr -> Semant SExpr
 checkExpr (Exprs es) = checkExprs es
 
-checkProgram :: Program -> Either SemantError SProgram
+checkProgram :: Program -> Semant SProgram
 checkProgram (Program expr) = SProgram <$> checkExpr expr
