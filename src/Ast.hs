@@ -7,15 +7,18 @@ data Op = Beat
         | SubA
         deriving (Show, Eq)
 
-data TempoChange = TempoUp Int
-                 | TempoDown Int
+data TempoChange = TempoUp Literal
+                 | TempoDown Literal
                  deriving (Show, Eq)
+
+data Literal = LitInt Int
+             | LitNegInt Int
+             deriving (Show, Eq)
 
 data Expr = Exprs [Expr]
           | Operation Op
-          | Bar Int Expr
-          | Repitition Int Expr
-          | Neg Int
+          | Bar Literal Expr
+          | Repitition Literal Expr
           deriving (Show, Eq)
 
 data Program = Program Expr

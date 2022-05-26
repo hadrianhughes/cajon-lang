@@ -19,15 +19,18 @@ operationP = Operation Beat <$ dot
          <|> Operation SubA <$ achar
 
 barP :: Parser Expr
-barP = try (Bar <$> (single '/' *> int) <* colon <*> (Exprs <$> someTill exprP (single '/')))
-   <|> Bar 4 <$> Exprs <$> (single '/' *> someTill exprP (single '/'))
+barP = try (Bar <$> (single '/' *> litP) <* colon <*> (Exprs <$> someTill exprP (single '/')))
+   <|> Bar (LitInt 4) <$> Exprs <$> (single '/' *> someTill exprP (single '/'))
+
+litP :: Parser Literal
+litP = LitNegInt <$> (dash *> int)
+   <|> LitInt <$> int
 
 exprP :: Parser Expr
 exprP = Exprs <$> parens (some exprP)
     <|> operationP
-    <|> Neg <$> (dash *> int)
     <|> barP
-    <|> try (Repitition <$> int <*> exprP)
+    <|> try (Repitition <$> litP <*> exprP)
 
 programP :: Parser Program
 programP = between sc eof (Program <$> exprP)
