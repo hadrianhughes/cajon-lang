@@ -45,6 +45,7 @@ library
         Ast
         Lexer
         Parser
+        Error
     other-modules:
         Paths_cajon_lang
     hs-source-dirs:
