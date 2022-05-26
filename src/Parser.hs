@@ -22,9 +22,12 @@ litP :: Parser Literal
 litP = LitNegInt <$> (dash *> int)
    <|> LitInt <$> int
 
-barP :: Parser Expr
-barP = try (Bar <$> (single '/' *> litP) <* colon <*> (Exprs <$> someTill exprP (single '/')))
-   <|> Bar (LitInt 4) <$> Exprs <$> (single '/' *> someTill exprP (single '/'))
+barInsideP :: Parser Bar
+barInsideP = try (Bar <$> litP <* colon <*> (Exprs <$> someTill exprP (single '/')))
+         <|> Bar (LitInt 4) <$> Exprs <$> someTill exprP (single '/')
+
+barsP :: Parser Expr
+barsP = Bars <$> (single '/' *> some barInsideP)
 
 tempoP :: Parser Expr
 tempoP = TempoChange <$> angles litP
@@ -32,7 +35,7 @@ tempoP = TempoChange <$> angles litP
 exprP :: Parser Expr
 exprP = Exprs <$> parens (some exprP)
     <|> operationP
-    <|> barP
+    <|> barsP
     <|> tempoP
     <|> try (Repitition <$> litP <*> exprP)
 

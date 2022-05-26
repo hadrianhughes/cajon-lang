@@ -11,9 +11,12 @@ data Literal = LitInt Int
              | LitNegInt Int
              deriving (Show, Eq)
 
+data Bar = Bar Literal Expr
+         deriving (Show, Eq)
+
 data Expr = Exprs [Expr]
           | Operation Op
-          | Bar Literal Expr
+          | Bars [Bar]
           | Repitition Literal Expr
           | TempoChange Literal
           deriving (Show, Eq)
