@@ -16,5 +16,6 @@ getInput = do
 main :: IO ()
 main = do
   input <- getInput
-  let ast = runParser programP "" (T.pack input)
-  putStrLn $ show ast
+  case runParser programP "" (T.pack input) of
+    Right ast -> putStrLn $ show ast
+    Left  err -> putStrLn $ "Parse error: " ++ (show err)
