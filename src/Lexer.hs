@@ -27,7 +27,7 @@ parens :: Parser a -> Parser a
 parens = between (symbol "(") (symbol ")")
 
 slashes :: Parser a -> Parser a
-slashes = between (symbol "/") (symbol "/")
+slashes = between (single '/') (single '/')
 
 angles :: Parser a -> Parser a
 angles = between (symbol "<") (symbol ">")

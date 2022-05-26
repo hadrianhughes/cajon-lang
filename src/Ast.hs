@@ -15,7 +15,6 @@ data Expr = Exprs [Expr]
           | Operation Op
           | Bar Int Expr
           | Repitition Int Expr
-          | Literal Int
           | Neg Int
           deriving (Show, Eq)
 

@@ -11,21 +11,20 @@ import Lexer
 import Text.Megaparsec
 import Control.Monad.Combinators.Expr
 
+barP :: Parser Expr
+barP = try (Bar <$> (single '/' *> int) <* colon <*> (Exprs <$> someTill exprP (single '/')))
+   <|> Bar 4 <$> Exprs <$> (single '/' *> someTill exprP (single '/'))
+
 exprP :: Parser Expr
-exprP = parens exprP
-    <|> angles exprP
+exprP = Exprs <$> parens (some exprP)
     <|> Operation Beat <$ dot
     <|> Operation Rest <$ comma
     <|> Operation SubE <$ echar
     <|> Operation SubAnd <$ plus
     <|> Operation SubA <$ achar
     <|> Neg <$> (dash *> int)
-    <|> try (Bar <$> int <* colon *> slashes exprP)
-    <|> Bar 4 <$> slashes exprP
+    <|> barP
     <|> try (Repitition <$> int <*> exprP)
-    <|> Literal <$> int
 
 programP :: Parser Program
-programP = between sc eof (Program <$> rootExpr)
-  where
-    rootExpr = Exprs <$> many exprP
+programP = between sc eof (Program <$> exprP)
