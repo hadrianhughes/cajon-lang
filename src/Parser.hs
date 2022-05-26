@@ -18,18 +18,22 @@ operationP = Operation Beat <$ dot
          <|> Operation SubAnd <$ plus
          <|> Operation SubA <$ achar
 
+litP :: Parser Literal
+litP = LitNegInt <$> (dash *> int)
+   <|> LitInt <$> int
+
 barP :: Parser Expr
 barP = try (Bar <$> (single '/' *> litP) <* colon <*> (Exprs <$> someTill exprP (single '/')))
    <|> Bar (LitInt 4) <$> Exprs <$> (single '/' *> someTill exprP (single '/'))
 
-litP :: Parser Literal
-litP = LitNegInt <$> (dash *> int)
-   <|> LitInt <$> int
+tempoP :: Parser Expr
+tempoP = TempoChange <$> angles litP
 
 exprP :: Parser Expr
 exprP = Exprs <$> parens (some exprP)
     <|> operationP
     <|> barP
+    <|> tempoP
     <|> try (Repitition <$> litP <*> exprP)
 
 programP :: Parser Program
