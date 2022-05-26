@@ -46,6 +46,7 @@ library
         Lexer
         Parser
         Error
+        Semant
     other-modules:
         Paths_cajon_lang
     hs-source-dirs:
@@ -55,4 +56,5 @@ library
         , megaparsec
         , text
         , parser-combinators
+        , mtl
     default-language: Haskell2010
