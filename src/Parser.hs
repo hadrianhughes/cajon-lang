@@ -40,4 +40,5 @@ exprP = Exprs <$> parens (some exprP)
     <|> try (Repitition <$> litP <*> exprP)
 
 programP :: Parser Program
-programP = between sc eof (Program <$> exprP)
+programP = try (between sc eof (Program <$> exprP))
+       <|> between sc eof (Program <$> Exprs <$> some exprP)
