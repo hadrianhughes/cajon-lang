@@ -6,6 +6,7 @@ import Control.Monad.Except
 import Control.Monad.ListM
 import Control.Monad.State
 import Data.Either.Combinators
+import Data.List
 import Data.Traversable
 
 type Semant = Either SemantError
@@ -13,9 +14,11 @@ type Semant = Either SemantError
 validOpPosition :: SExpr -> Expr -> Bool
 validOpPosition (SOperation prev) (Operation op)
   | op `elem` [Beat, Rest] = True
-  | op == SubE             = prev `elem` [Beat, Rest]
-  | op == SubAnd           = prev `elem` [Beat, Rest, SubE]
-  | op == SubA             = prev `elem` [Beat, Rest, SubE, SubAnd]
+  | otherwise              = prevPos < opPos
+  where
+    prevPos = prev `elemIndex` opOrder
+    opPos = op `elemIndex` opOrder
+    opOrder = [Beat, Rest, SubE, SubAnd, SubA]
 
 checkExprInContext :: SExpr -> Expr -> Semant SExpr
 checkExprInContext c (Exprs es) = mapRight (SExprs . snd) (mapAccumM handleCtx c es)
