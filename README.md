@@ -1,8 +1,10 @@
-# Cajon
+# Cajon 🪘
 
-A language for writing rhythms.
+Rhythm-as-code
 
 ## The Language
+
+Cajon is a language for writing rhythms. Its syntax reflects the way you might count a beat.
 
 ### Basic Operators
 
