@@ -4,6 +4,7 @@ import Ast
 import Error
 import Control.Monad.Except
 import Control.Monad.State
+import Data.Either.Combinators
 
 type Semant = Either SemantError
 
@@ -17,10 +18,7 @@ validOpPosition es (Operation op)
     (Operation prev) = last es
 
 checkExprs :: [Expr] -> Semant SExpr
-checkExprs es = do
-  case foldM checkExprs' [] es of
-    Left err  -> Left err
-    Right es' -> Right $ SExprs $ map (\(Operation op) -> SOperation op) es'
+checkExprs es = mapRight (SExprs . map (\(Operation op) -> SOperation op)) (foldM checkExprs' [] es)
   where
     checkExprs' :: [Expr] -> Expr -> Either SemantError [Expr]
     checkExprs' es e@(Operation op) =
