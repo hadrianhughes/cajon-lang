@@ -36,14 +36,6 @@ Cajon is a language for writing rhythms. Its syntax reflects the way you might c
 * The number of beats in a bar can be inferred from the expression within it. For instance, the input `.+.+.+.+` would produce a bar of 4/4, because it contains 4 beats.
 * The value of a beat is 4 by default. Other values must be stated explicitly by prefixing a bar with the desired value followed by a colon `:`. For example, the input `8:6.` would produce a measure of 6/8.
 
-### Expressions
-
-* An expression is a unit of Cajon which independently makes grammatical sense.
-* The beat `.` and rest `,` operators are expressions.
-* The subdivision operators are not expressions, because their validity depends on their position relative to a beat/rest and the other subdivision operators.
-* A bar or collection of bars is an expression.
-* An expression can be surrounded with parentheses `({expression})`. This alone will not affect its behavior.
-
 ### Repitition
 
 * An expression can be repeated `n` times by prepending it with `n`.
