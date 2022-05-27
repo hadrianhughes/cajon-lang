@@ -62,7 +62,7 @@ Cajon is a language for writing rhythms. Its syntax reflects the way you might c
 | `8:7.`                | A simple bar of 7/8                                                            |
 | `/8:4.+../3.+./`      | A bar of 6/8 followed by a bar of 4/4                                          |
 | `2/.e+a..+./`         | Same bar twice                                                                 |
-| `.a.,+`               | 4/4: One, ah-two, and                                                          |
+| `.a.,+,`              | 4/4: One, ah-two, and                                                          |
 | `/4./<20>/4./`        | A bar of 4/4, followed by an increase in tempo, followed by another bar of 4/4 |
 
 ## Obscure (valid) cases to handle
