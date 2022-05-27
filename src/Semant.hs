@@ -3,31 +3,34 @@ module Semant where
 import Ast
 import Error
 import Control.Monad.Except
+import Control.Monad.ListM
 import Control.Monad.State
 import Data.Either.Combinators
+import Data.Traversable
 
 type Semant = Either SemantError
 
-validOpPosition :: [Expr] -> Expr -> Bool
-validOpPosition es (Operation op)
+validOpPosition :: SExpr -> Expr -> Bool
+validOpPosition (SOperation prev) (Operation op)
   | op `elem` [Beat, Rest] = True
   | op == SubE             = prev `elem` [Beat, Rest]
   | op == SubAnd           = prev `elem` [Beat, Rest, SubE]
   | op == SubA             = prev `elem` [Beat, Rest, SubE, SubAnd]
-  where
-    (Operation prev) = last es
 
-checkExprs :: [Expr] -> Semant SExpr
-checkExprs es = mapRight (SExprs . map (\(Operation op) -> SOperation op)) (foldM checkExprs' [] es)
+checkExprInContext :: SExpr -> Expr -> Semant SExpr
+checkExprInContext c (Exprs es) = mapRight (SExprs . snd) (mapAccumM handleCtx c es)
   where
-    checkExprs' :: [Expr] -> Expr -> Either SemantError [Expr]
-    checkExprs' es e@(Operation op) =
-      if validOpPosition es e
-         then Right $ es ++ [Operation op]
+    handleCtx :: SExpr -> Expr -> Semant (SExpr, SExpr)
+    handleCtx a b = let x = checkExprInContext a b in mapRight (\x' -> (x',x')) x
+
+checkExprInContext c e@(Operation op) =
+  case c of
+    (SExprs []) -> Right $ SOperation op
+    (SExprs es) -> checkExprInContext (last es) e
+    (SOperation _) ->
+      if validOpPosition c e
+         then Right $ SOperation op
          else Left $ MisplacedSubdivision (opToSubDiv e)
 
-checkExpr :: Expr -> Semant SExpr
-checkExpr (Exprs es) = checkExprs es
-
 checkProgram :: Program -> Semant SProgram
-checkProgram (Program expr) = SProgram <$> checkExpr expr
+checkProgram (Program expr) = SProgram <$> checkExprInContext (SExprs []) expr

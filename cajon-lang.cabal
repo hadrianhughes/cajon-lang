@@ -59,4 +59,5 @@ library
         , parser-combinators
         , mtl
         , either
+        , monadlist
     default-language: Haskell2010
