@@ -38,10 +38,10 @@ Cajon is a language for writing rhythms. Its syntax reflects the way you might c
 
 ### Repitition
 
-* An expression can be repeated `n` times by prepending it with `n`.
-  - `n.` - `n` beats
-  - `n({expression})` - `n` repititions of some surrounded expression
-  - `n/{expression}/` - `n` repititions of a bar
+* An expression can be repeated n times by prepending it with `n`.
+  - `n.` - n beats
+  - `n({expression})` - n repititions of some surrounded expression
+  - `n/{expression}/` - n repititions of a bar
 
 ### Tempo
 
