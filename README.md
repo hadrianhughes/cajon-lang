@@ -70,3 +70,11 @@ A language for writing rhythms.
 | `2/.e+a..+./`         | Same bar twice                                                                 |
 | `.a.,+`               | 4/4: One, ah-two, and                                                          |
 | `/4./<20>/4./`        | A bar of 4/4, followed by an increase in tempo, followed by another bar of 4/4 |
+
+## Obscure (valid) cases to handle
+
+| Snippet        | Explanation                                                                               |
+|----------------|-------------------------------------------------------------------------------------------|
+| `2(.+.)e+a`    | Since the last operation in parentheses is a beat, it is valid to follow it up with `e+a` |
+| `2(3(.+.))e+a` | Same as above, but the repititions could be nested.                                       |
+| `+a...+.`      | Might want to start a track on a subdivision.                                             |
