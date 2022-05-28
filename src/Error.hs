@@ -15,4 +15,5 @@ opToSubDiv (Operation op) =
 
 data SemantError =
     MisplacedSubdivision SubdivisionType
+  | NegativeBeatValue Literal
   deriving (Show, Eq)
