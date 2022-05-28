@@ -27,7 +27,6 @@ checkExprs c (Exprs es) = mapRight (SExprs . snd) (mapAccumM handleCtx c es)
   where
     handleCtx :: SExpr -> Expr -> Semant (SExpr, SExpr)
     handleCtx a b = let x = checkExpr a b in mapRight (\x' -> (x',x')) x
-checkExprs _ e = error $ "Something wrong here: " ++ (show e)
 
 checkOperation :: InContextChecker
 checkOperation c e@(Operation op) =
