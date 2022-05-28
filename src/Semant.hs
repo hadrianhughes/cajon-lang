@@ -37,6 +37,7 @@ checkOperation c e@(Operation op) =
       if validOpPosition c e
          then Right $ SOperation op
          else Left $ MisplacedSubdivision op
+    _ -> Right $ SOperation op
 
 checkBar :: Bar -> Semant SBar
 checkBar b@(Bar v es) =
@@ -58,6 +59,12 @@ checkRepitition c r@(Repitition n es) =
     (LitNegInt _) -> Left $ NegativeRepitition n
     (LitInt n')   -> mapRight (SRepitition (SLitInt n')) (checkExprs c es)
 
+checkTempoChange :: Expr -> SExpr
+checkTempoChange (TempoChange n) = STempoChange $
+  case n of
+    (LitInt n')    -> SLitInt n'
+    (LitNegInt n') -> SLitNegInt n'
+
 checkExpr :: InContextChecker
 checkExpr c e = checker c e
   where
@@ -67,6 +74,7 @@ checkExpr c e = checker c e
         (Operation _)    -> checkOperation
         (Bars _)         -> checkBars
         (Repitition _ _) -> checkRepitition
+        (TempoChange _)  -> (\_ e -> Right $ checkTempoChange e)
 
 checkProgram :: Program -> Semant SProgram
 checkProgram (Program expr) = SProgram <$> checkExpr (SExprs []) expr
