@@ -38,6 +38,20 @@ checkOperation c e@(Operation op) =
          then Right $ SOperation op
          else Left $ MisplacedSubdivision op
 
+checkBar :: Bar -> Semant SBar
+checkBar b@(Bar v es) =
+  case v of
+    (LitNegInt _) -> Left $ NegativeBeatValue v
+    (LitInt i)    ->
+      let ses = checkExprs (SExprs []) es
+      in  mapRight (SBar (SLitInt i)) ses
+
+checkBars :: InContextChecker
+checkBars c (Bars bs) =
+  case c of
+    (SExprs []) -> SBars <$> mapM checkBar bs
+    _           -> Left $ MisplacedBar
+
 checkExpr :: InContextChecker
 checkExpr c e = checker c e
   where
@@ -45,6 +59,7 @@ checkExpr c e = checker c e
       case e of
         (Exprs _)     -> checkExprs
         (Operation _) -> checkOperation
+        (Bars _)      -> checkBars
 
 checkProgram :: Program -> Semant SProgram
 checkProgram (Program expr) = SProgram <$> checkExpr (SExprs []) expr
