@@ -36,7 +36,7 @@ checkOperation c e@(Operation op) =
     (SOperation _) ->
       if validOpPosition c e
          then Right $ SOperation op
-         else Left $ MisplacedSubdivision (opToSubDiv e)
+         else Left $ MisplacedSubdivision op
 
 checkExpr :: InContextChecker
 checkExpr c e = checker c e
