@@ -52,14 +52,21 @@ checkBars c (Bars bs) =
     (SExprs []) -> SBars <$> mapM checkBar bs
     _           -> Left $ MisplacedBar
 
+checkRepitition :: InContextChecker
+checkRepitition c r@(Repitition n es) =
+  case n of
+    (LitNegInt _) -> Left $ NegativeRepitition n
+    (LitInt n')   -> mapRight (SRepitition (SLitInt n')) (checkExprs c es)
+
 checkExpr :: InContextChecker
 checkExpr c e = checker c e
   where
     checker =
       case e of
-        (Exprs _)     -> checkExprs
-        (Operation _) -> checkOperation
-        (Bars _)      -> checkBars
+        (Exprs _)        -> checkExprs
+        (Operation _)    -> checkOperation
+        (Bars _)         -> checkBars
+        (Repitition _ _) -> checkRepitition
 
 checkProgram :: Program -> Semant SProgram
 checkProgram (Program expr) = SProgram <$> checkExpr (SExprs []) expr
