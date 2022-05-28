@@ -37,7 +37,7 @@ checkOperation c e@(Operation op) =
     (SOperation _) ->
       if validOpPosition c e
          then Right $ SOperation op
-         else Left $ MisplacedSubdivision op
+         else Left $ MisplacedSubdivision c op
     _ -> Right $ SOperation op
 
 checkBar :: Bar -> Semant SBar

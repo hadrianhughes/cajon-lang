@@ -2,6 +2,7 @@ module Main where
 
 import Options.Applicative
 import Data.Text as T
+import Error
 import Parser
 import Semant
 
@@ -33,7 +34,7 @@ runOpts (Options action input) = do
          then putStrLn $ show ast
          else
           case checkProgram ast of
-            Left err   -> putStrLn $ "Semant Error: " ++ (show err)
+            Left err   -> putStrLn $ formatSemantError err
             Right sast -> putStrLn $
               if action == Sast
                  then show sast
