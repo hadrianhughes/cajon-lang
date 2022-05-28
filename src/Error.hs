@@ -15,5 +15,4 @@ opToSubDiv (Operation op) =
 
 data SemantError =
     MisplacedSubdivision SubdivisionType
-  | NestedBars
   deriving (Show, Eq)
