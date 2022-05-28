@@ -11,6 +11,8 @@ import Data.Traversable
 
 type Semant = Either SemantError
 
+type InContextChecker = SExpr -> Expr -> Semant SExpr
+
 validOpPosition :: SExpr -> Expr -> Bool
 validOpPosition (SOperation prev) (Operation op)
   | op `elem` [Beat, Rest] = True
@@ -20,20 +22,29 @@ validOpPosition (SOperation prev) (Operation op)
     opPos = op `elemIndex` opOrder
     opOrder = [Beat, Rest, SubE, SubAnd, SubA]
 
-checkExprInContext :: SExpr -> Expr -> Semant SExpr
-checkExprInContext c (Exprs es) = mapRight (SExprs . snd) (mapAccumM handleCtx c es)
+checkExprs :: InContextChecker
+checkExprs c (Exprs es) = mapRight (SExprs . snd) (mapAccumM handleCtx c es)
   where
     handleCtx :: SExpr -> Expr -> Semant (SExpr, SExpr)
-    handleCtx a b = let x = checkExprInContext a b in mapRight (\x' -> (x',x')) x
+    handleCtx a b = let x = checkExpr a b in mapRight (\x' -> (x',x')) x
 
-checkExprInContext c e@(Operation op) =
+checkOperation :: InContextChecker
+checkOperation c e@(Operation op) =
   case c of
     (SExprs []) -> Right $ SOperation op
-    (SExprs es) -> checkExprInContext (last es) e
+    (SExprs es) -> checkExprs (last es) e
     (SOperation _) ->
       if validOpPosition c e
          then Right $ SOperation op
          else Left $ MisplacedSubdivision (opToSubDiv e)
 
+checkExpr :: InContextChecker
+checkExpr c e = checker c e
+  where
+    checker =
+      case e of
+        (Exprs _)     -> checkExprs
+        (Operation _) -> checkOperation
+
 checkProgram :: Program -> Semant SProgram
-checkProgram (Program expr) = SProgram <$> checkExprInContext (SExprs []) expr
+checkProgram (Program expr) = SProgram <$> checkExpr (SExprs []) expr
