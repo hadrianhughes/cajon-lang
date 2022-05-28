@@ -2,6 +2,7 @@ module Main where
 
 import Options.Applicative
 import Data.Text as T
+import Text.Megaparsec
 import Error
 import Parser
 import Semant
@@ -28,7 +29,7 @@ main = runOpts =<< execParser (optionsP `withInfo` infoString)
 runOpts :: Options -> IO ()
 runOpts (Options action input) = do
   case runParser programP "" (T.pack input) of
-    Left  err -> putStrLn $ "Parse error: " ++ (show err)
+    Left  err -> putStrLn $ "Parse error: " ++ (errorBundlePretty err)
     Right ast -> do
       if action == Ast
          then putStrLn $ show ast
