@@ -27,6 +27,7 @@ checkExprs c (Exprs es) = mapRight (SExprs . snd) (mapAccumM handleCtx c es)
   where
     handleCtx :: SExpr -> Expr -> Semant (SExpr, SExpr)
     handleCtx a b = let x = checkExpr a b in mapRight (\x' -> (x',x')) x
+checkExprs _ e = error $ "Something wrong here: " ++ (show e)
 
 checkOperation :: InContextChecker
 checkOperation c e@(Operation op) =
@@ -44,8 +45,8 @@ checkBar b@(Bar v es) =
   case v of
     (LitNegInt _) -> Left $ NegativeBeatValue v
     (LitInt i)    ->
-      let ses = checkExprs (SExprs []) es
-      in  mapRight (SBar (SLitInt i)) ses
+      let e' = checkExpr (SExprs []) es
+      in  mapRight (SBar (SLitInt i)) e'
 
 checkBars :: InContextChecker
 checkBars c (Bars bs) =
@@ -57,7 +58,7 @@ checkRepitition :: InContextChecker
 checkRepitition c r@(Repitition n es) =
   case n of
     (LitNegInt _) -> Left $ NegativeRepitition n
-    (LitInt n')   -> mapRight (SRepitition (SLitInt n')) (checkExprs c es)
+    (LitInt n')   -> mapRight (SRepitition (SLitInt n')) (checkExpr c es)
 
 checkTempoChange :: Expr -> SExpr
 checkTempoChange (TempoChange n) = STempoChange $
